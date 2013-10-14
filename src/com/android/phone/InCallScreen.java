@@ -3044,10 +3044,10 @@ public class InCallScreen extends Activity
                     }
                     PhoneUtils.turnOnSpeaker(this, true, true);
                     // fix for low-incall volume (reset stream volume and restore it again)
-    			    AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-    		        int volume = audioManager.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
-    		        audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, 0, 0);
-    		        audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, volume, 0);
+    		    AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+    	            int volume = audioManager.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
+    	            audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, 0, 0);
+    	            audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, volume, 0);
                 }
                 break;
 
@@ -3063,11 +3063,11 @@ public class InCallScreen extends Activity
                     // see toggleSpeaker() and/or switchInCallAudio().)
                     if (PhoneUtils.isSpeakerOn(this)) {
                         PhoneUtils.turnOnSpeaker(this, false, true);
-                    // fix for low-incall volume (reset stream volume and restore it again)
-    			    AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-    		        int volume = audioManager.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
-    		        audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, 0, 0);
-    		        audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, volume, 0);
+                        // fix for low-incall volume (reset stream volume and restore it again)
+    	                AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+    	                int volume = audioManager.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
+    	                audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, 0, 0);
+    	                audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, volume, 0);
                     }
                     connectBluetoothAudio();
                 }
@@ -3082,10 +3082,10 @@ public class InCallScreen extends Activity
                 if (PhoneUtils.isSpeakerOn(this)) {
                     PhoneUtils.turnOnSpeaker(this, false, true);
                     // fix for low-incall volume (reset stream volume and restore it again)
-    			    AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-    		        int volume = audioManager.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
-    		        audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, 0, 0);
-    		        audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, volume, 0);
+    	            AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+    	            int volume = audioManager.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
+    	            audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, 0, 0);
+    	            audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, volume, 0);
                 }
                 break;
 
