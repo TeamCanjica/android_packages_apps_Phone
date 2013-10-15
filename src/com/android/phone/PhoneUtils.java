@@ -326,10 +326,7 @@ public class PhoneUtils {
                 }
             }
         }
-	AudioManager audioManager = (AudioManager) Context.getSystemService(Context.AUDIO_SERVICE);
-        int volume = audioManager.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
-        audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, 0, 0);
-        audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, volume, 0);
+        resetAudioStreamVolume(app.getApplicationContext());
         return answered;
     }
 
@@ -2004,6 +2001,18 @@ public class PhoneUtils {
             if (DBG) log("turnOnNoiseSuppression: " + aPValues[0] + "=" + aPValues[2]);
             audioManager.setParameters(aPValues[0] + "=" + aPValues[2]);
         }
+    }
+    
+    /**
+     * Reset the audio stream volume to fix the low-incall volume bug.
+     * 
+     * Decrease the stream volume and restore the original value.
+     */
+    static void resetAudioStreamVolume(Context context) {
+    	AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        int volume = audioManager.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
+        audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, 0, 0);
+        audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, volume, 0);
     }
 
     /**
