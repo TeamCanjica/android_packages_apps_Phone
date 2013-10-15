@@ -326,7 +326,7 @@ public class PhoneUtils {
                 }
             }
         }
-		AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+	AudioManager audioManager = (AudioManager) Context.getSystemService(Context.AUDIO_SERVICE);
         int volume = audioManager.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
         audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, 0, 0);
         audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, volume, 0);
