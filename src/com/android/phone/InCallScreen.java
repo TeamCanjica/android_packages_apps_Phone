@@ -2962,6 +2962,7 @@ public class InCallScreen extends Activity
             disconnectBluetoothAudio();
         }
         PhoneUtils.turnOnSpeaker(this, newSpeakerState, true);
+        resetStreamVolume();
 
         // And update the InCallTouchUi widget (since the "audio mode"
         // button might need to change its appearance based on the new
@@ -3008,6 +3009,7 @@ public class InCallScreen extends Activity
                 }
 
                 connectBluetoothAudio();
+                resetStreamVolume();
             }
         } else {
             // Bluetooth isn't available; the onscreen UI shouldn't have
@@ -3042,13 +3044,9 @@ public class InCallScreen extends Activity
                     if (isBluetoothAvailable() && isBluetoothAudioConnected()) {
                         disconnectBluetoothAudio();
                     }
-                    PhoneUtils.turnOnSpeaker(this, true, true);
-                    // fix for low-incall volume (reset stream volume and restore it again)
-    		    AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-    	            int volume = audioManager.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
-    	            audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, 0, 0);
-    	            audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, volume, 0);
+                    PhoneUtils.turnOnSpeaker(this, true, true);                    
                 }
+                resetStreamVolume();
                 break;
 
             case BLUETOOTH:
@@ -3062,15 +3060,11 @@ public class InCallScreen extends Activity
                     // manually disconnect the active bluetooth headset;
                     // see toggleSpeaker() and/or switchInCallAudio().)
                     if (PhoneUtils.isSpeakerOn(this)) {
-                        PhoneUtils.turnOnSpeaker(this, false, true);
-                        // fix for low-incall volume (reset stream volume and restore it again)
-    	                AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-    	                int volume = audioManager.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
-    	                audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, 0, 0);
-    	                audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, volume, 0);
+                        PhoneUtils.turnOnSpeaker(this, false, true);                        
                     }
                     connectBluetoothAudio();
                 }
+                resetStreamVolume();
                 break;
 
             case EARPIECE:
@@ -3080,13 +3074,9 @@ public class InCallScreen extends Activity
                     disconnectBluetoothAudio();
                 }
                 if (PhoneUtils.isSpeakerOn(this)) {
-                    PhoneUtils.turnOnSpeaker(this, false, true);
-                    // fix for low-incall volume (reset stream volume and restore it again)
-    	            AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-    	            int volume = audioManager.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
-    	            audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, 0, 0);
-    	            audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, volume, 0);
+                    PhoneUtils.turnOnSpeaker(this, false, true);                    
                 }
+                resetStreamVolume();
                 break;
 
             default:
@@ -3098,6 +3088,19 @@ public class InCallScreen extends Activity
         // mode" button might need to change its appearance based on the
         // new audio state.)
         updateInCallTouchUi();
+    }
+
+
+     /**
+     * Fix for low-incall volume while switching to between speaker, earpiece and bluetooth
+     * (reset stream volume and restore it again)
+     *
+     */
+    private void resetStreamVolume() {                
+        AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        int volume = audioManager.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
+        audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, 0, 0);
+        audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, volume, 0);
     }
 
     /**
