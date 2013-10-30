@@ -3157,6 +3157,7 @@ public class InCallScreen extends Activity
             disconnectBluetoothAudio();
         }
         PhoneUtils.turnOnSpeaker(this, newSpeakerState, true);
+        PhoneUtils.resetAudioStreamVolume(getApplicationContext());
 
         // And update the InCallTouchUi widget (since the "audio mode"
         // button might need to change its appearance based on the new
@@ -3209,6 +3210,8 @@ public class InCallScreen extends Activity
             // allowed this request in the first place!
             Log.w(LOG_TAG, "toggleBluetooth(): bluetooth is unavailable");
         }
+        
+        PhoneUtils.resetAudioStreamVolume(getApplicationContext());
 
         // And update the InCallTouchUi widget (since the "audio mode"
         // button might need to change its appearance based on the new
@@ -3239,6 +3242,7 @@ public class InCallScreen extends Activity
                     }
                     PhoneUtils.turnOnSpeaker(this, true, true);
                 }
+                PhoneUtils.resetAudioStreamVolume(getApplicationContext());
                 break;
 
             case BLUETOOTH:
@@ -3256,6 +3260,7 @@ public class InCallScreen extends Activity
                     }
                     connectBluetoothAudio();
                 }
+                PhoneUtils.resetAudioStreamVolume(getApplicationContext());
                 break;
 
             case EARPIECE:
@@ -3267,6 +3272,7 @@ public class InCallScreen extends Activity
                 if (PhoneUtils.isSpeakerOn(this)) {
                     PhoneUtils.turnOnSpeaker(this, false, true);
                 }
+                PhoneUtils.resetAudioStreamVolume(getApplicationContext());
                 break;
 
             default:
