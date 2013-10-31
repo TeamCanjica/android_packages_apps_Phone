@@ -3344,9 +3344,8 @@ public class PhoneUtils {
      *  Decrease the stream volume and restore the original value.
      */
      public static void resetAudioStreamVolume(Context context) {
-         AudioManager audioManager = (AudioManager) context.getSystemService(context.AUDIO_SERVICE);
-         int volume = audioManager.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
-         audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, 0, 0);
-         audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, volume, 0);
+         AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+         audioManager.adjustStreamVolume(AudioManager.STREAM_VOICE_CALL, AudioManager.ADJUST_LOWER, AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
+         audioManager.adjustStreamVolume(AudioManager.STREAM_VOICE_CALL, AudioManager.ADJUST_RAISE, AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
      }
 }
