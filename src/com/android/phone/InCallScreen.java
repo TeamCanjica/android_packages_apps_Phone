@@ -1791,6 +1791,12 @@ public class InCallScreen extends Activity
         // Make sure we update the poke lock and wake lock when certain
         // phone state changes occur.
         mApp.updateWakeState();
+
+        // Fix for low in-call volume bug.
+        // Reset the audio volume stream when phone state is OFFHOOK.
+        if (state == PhoneConstants.State.OFFHOOK) {
+            PhoneUtils.resetAudioStreamVolume();
+        }
     }
 
     /**
@@ -2962,7 +2968,10 @@ public class InCallScreen extends Activity
             disconnectBluetoothAudio();
         }
         PhoneUtils.turnOnSpeaker(this, newSpeakerState, true);
-        PhoneUtils.resetAudioStreamVolume(getApplicationContext());
+
+        // Fix for low in-call volume bug.
+        // Reset the audio volume stream when switching between speaker and earpiece.
+        PhoneUtils.resetAudioStreamVolume();
 
         // And update the InCallTouchUi widget (since the "audio mode"
         // button might need to change its appearance based on the new
@@ -3009,13 +3018,16 @@ public class InCallScreen extends Activity
                 }
 
                 connectBluetoothAudio();
-                PhoneUtils.resetAudioStreamVolume(getApplicationContext());
             }
         } else {
             // Bluetooth isn't available; the onscreen UI shouldn't have
             // allowed this request in the first place!
             Log.w(LOG_TAG, "toggleBluetooth(): bluetooth is unavailable");
         }
+
+        // Fix for low in-call volume bug.
+        // Reset the audio volume stream when switching between normal call audio and bluetooth.
+        PhoneUtils.resetAudioStreamVolume();
 
         // And update the InCallTouchUi widget (since the "audio mode"
         // button might need to change its appearance based on the new
@@ -3044,9 +3056,8 @@ public class InCallScreen extends Activity
                     if (isBluetoothAvailable() && isBluetoothAudioConnected()) {
                         disconnectBluetoothAudio();
                     }
-                    PhoneUtils.turnOnSpeaker(this, true, true);                    
+                    PhoneUtils.turnOnSpeaker(this, true, true);
                 }
-                PhoneUtils.resetAudioStreamVolume(getApplicationContext());
                 break;
 
             case BLUETOOTH:
@@ -3060,11 +3071,10 @@ public class InCallScreen extends Activity
                     // manually disconnect the active bluetooth headset;
                     // see toggleSpeaker() and/or switchInCallAudio().)
                     if (PhoneUtils.isSpeakerOn(this)) {
-                        PhoneUtils.turnOnSpeaker(this, false, true);                        
+                        PhoneUtils.turnOnSpeaker(this, false, true);
                     }
                     connectBluetoothAudio();
                 }
-                PhoneUtils.resetAudioStreamVolume(getApplicationContext());
                 break;
 
             case EARPIECE:
@@ -3074,15 +3084,18 @@ public class InCallScreen extends Activity
                     disconnectBluetoothAudio();
                 }
                 if (PhoneUtils.isSpeakerOn(this)) {
-                    PhoneUtils.turnOnSpeaker(this, false, true);                    
+                    PhoneUtils.turnOnSpeaker(this, false, true);
                 }
-                PhoneUtils.resetAudioStreamVolume(getApplicationContext());
                 break;
 
             default:
                 Log.wtf(LOG_TAG, "switchInCallAudio: unexpected mode " + newMode);
                 break;
         }
+
+        // Fix for low in-call volume bug.
+        // Reset the audio stream volume after switch between in-call audio.
+        PhoneUtils.resetAudioStreamVolume();
 
         // And finally, update the InCallTouchUi widget (since the "audio
         // mode" button might need to change its appearance based on the

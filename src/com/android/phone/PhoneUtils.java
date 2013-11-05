@@ -326,7 +326,6 @@ public class PhoneUtils {
                 }
             }
         }
-        resetAudioStreamVolume(app.getApplicationContext());
         return answered;
     }
 
@@ -2002,17 +2001,36 @@ public class PhoneUtils {
             audioManager.setParameters(aPValues[0] + "=" + aPValues[2]);
         }
     }
-    
+
     /**
-     * Reset the audio stream volume to fix the low-incall volume bug.
-     * 
-     * Decrease the stream volume and restore the original value.
+     * Reset the audio stream volume to fix the low in-call volume bug.
+     *
+     * Due to a bug in the OMX system, the audio stream volume is set to 0 after it was set to it's default volume.
+     * Calling PhoneUtils.resetAudioStreamVolume() triggers the system to reset the volume.
+     *
+     * This should be called on every place where is switched between audio modes.
+     *
+     * REMARK: I think it only appears on the voice call stream, but to be sure I also do it on the bluetooth stream.
      */
-    static void resetAudioStreamVolume(Context context) {
-    	AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-        int volume = audioManager.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
-        audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, 0, 0);
-        audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, volume, 0);
+    static void resetAudioStreamVolume() {
+        PhoneGlobals app = PhoneGlobals.getInstance();
+        AudioManager audioManager = (AudioManager) app.getSystemService(Context.AUDIO_SERVICE);
+        // determine actual streamType
+        int streamType = AudioManager.STREAM_VOICE_CALL;
+        if (app.isBluetoothHeadsetAudioOn()) {
+            streamType = AudioManager.STREAM_BLUETOOTH_SCO;
+        }
+        // determine volume and 1 level lower volume (lowest level can be 0)
+        int volume = audioManager.getStreamVolume(streamType);
+        int lowerVolume = volume - 1;
+        if (lowerVolume < 0) {
+            lowerVolume = 0;
+        }
+        log("resetAudioStreamVolume (streamType=" + streamType + ", streamVolume=" + volume + ")...");
+        // It's important to change it to another volume before restoring the original volume,
+        // otherwise the volume change will NOT be triggered!!
+        audioManager.setStreamVolume(streamType, lowerVolume, 0);
+        audioManager.setStreamVolume(streamType, volume, 0);
     }
 
     /**
