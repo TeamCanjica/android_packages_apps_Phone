@@ -374,7 +374,6 @@ public class PhoneUtils {
                 }
             }
         }
-        resetAudioStreamVolume(app.getApplicationContext());
         return answered;
     }
 
@@ -3338,14 +3337,4 @@ public class PhoneUtils {
         }
         return value;
     }
-    
-    /**
-     *  Reset the audio stream volume to fix the low-incall volume bug.
-     *  Decrease the stream volume and restore the original value.
-     */
-     public static void resetAudioStreamVolume(Context context) {
-         AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-         audioManager.adjustStreamVolume(AudioManager.STREAM_VOICE_CALL, AudioManager.ADJUST_LOWER, AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
-         audioManager.adjustStreamVolume(AudioManager.STREAM_VOICE_CALL, AudioManager.ADJUST_RAISE, AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
-     }
 }
